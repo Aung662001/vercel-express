@@ -32,7 +32,7 @@ app.get("/api", (req: Request, res: Response) => {
   res.send(html);
 });
 
-app.get("api/users", (req: Request, res: Response) => {
+app.get("/api/users", (req: Request, res: Response) => {
   res.send({ name: "aungaung", age: 23 });
 });
 
