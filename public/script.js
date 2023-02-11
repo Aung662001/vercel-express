@@ -5,19 +5,28 @@ const fetchData = async () => {
   if (apiUrl) {
     const response = await fetch(`${apiUrl}/users`);
     const data = await response.json();
-    console.log(data);
   } else {
     window.location.href = "/api";
   }
 };
-const uploadFile = async () => {
-  console.log("inside uploadFile");
+const uploadForm = document.querySelector("#uploadForm");
+
+const uploadFile = async (e) => {
+  e.preventDefault();
   const inputTag = document.getElementById("uploadFile");
+  const files = [...inputTag.files]; //not real array
+  const formData = new FormData(); //object
+  files.forEach((file) => formData.append("key", file));
+  console.log(files);
   const response = await fetch(`${apiUrl}/uploadFile`, {
     method: "POST",
     Headers: { "Content-Type": "application/json" },
-    body: inputTag.files[0],
+    body: formData,
   });
-  console.log(inputTag.files);
+  const responseData = await response.json();
+  console.log(responseData.key.size);
 };
+
+uploadForm.addEventListener("submit", uploadFile);
+
 fetchData();

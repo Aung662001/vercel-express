@@ -8,8 +8,10 @@
   </head>
   <body>
     <h1>HEllo crud</h1>
-    <input type="file" id="uploadFile" />
-    <button type="submit" onclick="uploadFile()">Send</button>
+    <form enctype="multipart/form-data" id="uploadForm">
+      <input type="file" id="uploadFile" multiple />
+      <button type="submit" id="button">Send</button>
+    </form>
 
     <script src="script.js"></script>
   </body>
