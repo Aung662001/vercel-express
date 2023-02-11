@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import env from "dotenv";
+import fs from "fs";
+import uuid from "short-uuid";
 const app = express();
 const port = 3000;
 env.config();
@@ -36,6 +38,12 @@ app.get("/api/users", (req: Request, res: Response) => {
   res.send({ name: "aungaung", age: 23 });
 });
 
+app.post("/api/uploadFile", (req: Request, res: Response) => {
+  const writeStream = fs.createWriteStream("./test.jpg");
+  req.pipe(writeStream);
+  console.log(uuid.generate());
+  res.end();
+});
 app.listen(port, () => {
   console.log("sever is listenint at port", port);
 });
