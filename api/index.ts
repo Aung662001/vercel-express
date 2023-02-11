@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
-import env from "dotenv";
+import dotenv from "dotenv";
 import fs from "fs";
 import uuid from "short-uuid";
 const app = express();
 const port = 3000;
-env.config();
+dotenv.config();
 app.use(express.static("public"));
 
 const apiUrl = process.env.API_URL;
