@@ -4,6 +4,10 @@ import formidable from "formidable";
 import fs, { rename, renameSync } from "fs";
 import uuid from "short-uuid";
 import { json } from "body-parser";
+import aws from "aws-sdk";
+import CloudWatchLogs from "aws-sdk/clients/cloudwatchlogs";
+const multer = require("multer");
+const multerS3 = require("multer-s3-v2");
 const app = express();
 const port = 3000;
 dotenv.config();
@@ -38,31 +42,60 @@ app.get("/api", (req: Request, res: Response) => {
 app.get("/api/users", (req: Request, res: Response) => {
   res.send({ name: "aungaung", age: 23 });
 });
+
+///////////////////////////
+
+////////////////////////
 app.post("/api/uploadFile", (req: Request, res: Response) => {
   ///////////////////////formidable section
-  const form = formidable({ multiples: true });
+  const form = formidable();
   form.parse(req, (error, fields, file) => {
-    const allReq = JSON.stringify(file.key);
-    const prepare = JSON.parse(allReq);
-    console.log(prepare);
-    if (Array.isArray(prepare)) {
-      prepare.forEach((oneIten) => {
-        const oldPath = oneIten.filepath;
-        const newPath = `${__dirname}/../photos/${uuid.generate()}.jpg`;
-        renameSync(`${oldPath}`, newPath);
-      });
-    } else {
-      const finalData = file.key.toString();
-      const myArray = finalData.split(" ");
-      const path = myArray[myArray.length - 1];
-      console.log(__dirname);
-      renameSync(path, `${__dirname}/../photos/${uuid.generate()}.jpg`);
-      res.json(file);
-    }
+    const allReq = JSON.stringify(file.key); //all data
+    const uploadFileData = JSON.parse(allReq); //all data
+    const filePath = uploadFileData.filepath;
+    const fileName = `${uuid.generate()}${uploadFileData.originalFilename}`;
+    console.log(fileName);
+    const fileStream = fs.createReadStream(filePath);
+    const s3 = new aws.S3({
+      endpoint: "sgp1.digitaloceanspaces.com",
+    });
+    s3.upload(
+      {
+        Bucket: "msquarefdc",
+        Key: fileName,
+        ACL: "public-read",
+        Body: fileStream,
+      },
+      (err, data) => {
+        if (err) {
+          console.log(err.message);
+        } else {
+          console.log(data);
+          res.json(data);
+        }
+      }
+    );
+
+    console.log(filePath);
+    // if (Array.isArray(uploadFileData)) {
+    //   uploadFileData.forEach((uploadFile) => {
+    //     const oldPath = uploadFile.filepath; //file path
+    //     const fileName = `${uuid.generate()},.jpg`; //file name
+    //     const newPath = `${__dirname}/../photos/${uuid.generate()}.jpg`;
+    //     renameSync(`${oldPath}`, newPath);
+    //   });
+    // } else {
+    //   const finalData = file.key.toString();
+    //   const myArray = finalData.split(" ");
+    //   const path = myArray[myArray.length - 1];
+    //   console.log(__dirname);
+    //   renameSync(path, `${__dirname}/../photos/${uuid.generate()}.jpg`);
+    //   res.json(file);
+    // }
   });
   ///////////////////////
-  /*const writeStream = fs.createWriteStream("./test.jpg");
-  req.pipe(writeStream);
+  /*const fileStream = fs.creat fileStream("./test.jpg");
+  req.pipt fileStream);
   console.log(uuid.generate());*/
 });
 app.listen(port, () => {

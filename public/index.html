@@ -5,13 +5,22 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <style>
+      .imageTag {
+        position: relative;
+        margin: 50px;
+        width: 400px;
+        height: 500px;
+      }
+    </style>
   </head>
   <body>
     <h1>HEllo crud</h1>
     <form enctype="multipart/form-data" id="uploadForm">
-      <input type="file" id="uploadFile" multiple />
+      <input type="file" id="uploadFile" />
       <button type="submit" id="button">Send</button>
     </form>
+    <div class="imageTag"></div>
 
     <script src="script.js"></script>
   </body>

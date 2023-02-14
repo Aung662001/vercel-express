@@ -1,5 +1,6 @@
 const apiUrl = localStorage.getItem("apiUrl");
-
+const image = document.querySelector(".imageTag");
+let responseDataLocation = "";
 const fetchData = async () => {
   console.log(apiUrl);
   if (apiUrl) {
@@ -9,6 +10,7 @@ const fetchData = async () => {
     window.location.href = "/api";
   }
 };
+
 const uploadForm = document.querySelector("#uploadForm");
 
 const uploadFile = async (e) => {
@@ -23,10 +25,16 @@ const uploadFile = async (e) => {
     Headers: { "Content-Type": "application/json" },
     body: formData,
   });
-  const responseData = await response.json();
-  console.log(responseData.key.size);
+  responseDataLocation = await response.json();
+  const Link = responseDataLocation.Location;
+  await Tag(Link);
 };
-
+const Tag = async (Link) => {
+  const div = document.createElement("div");
+  div.innerHTML = `<img src="${Link}"></img>`;
+  console.log(image);
+  image.append(div);
+};
 uploadForm.addEventListener("submit", uploadFile);
 
 fetchData();
