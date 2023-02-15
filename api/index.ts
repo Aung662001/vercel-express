@@ -58,6 +58,8 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
     const fileStream = fs.createReadStream(filePath);
     const s3 = new aws.S3({
       endpoint: "sgp1.digitaloceanspaces.com",
+      accessKeyId: process.env.aws_access_key_id,
+      secretAccessKey: process.env.aws_secret_access_key,
     });
     s3.upload(
       {
