@@ -16,16 +16,15 @@ const uploadForm = document.querySelector("#uploadForm");
 const uploadFile = async (e) => {
   e.preventDefault();
   const inputTag = document.getElementById("uploadFile");
-  const files = [...inputTag.files]; //not real array
+  const files = [...inputTag.files]; //to become a real array
   const formData = new FormData(); //object
-  files.forEach((file) => formData.append("key", file));
-  console.log(files);
+  files.forEach((file) => formData.append("key", file)); //append all files data to an object
 
   const response = await fetch(`${apiUrl}/uploadFile`, {
     method: "POST",
     body: formData,
   });
-  responseDataLocation = await response.json();
+  responseDataLocation = await response.json(); //respond from digitalOcean
   const Link = responseDataLocation.Location;
   await Tag(Link);
 };

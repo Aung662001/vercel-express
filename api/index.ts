@@ -54,7 +54,6 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
     const uploadFileData = JSON.parse(allReq); //all data
     const filePath = uploadFileData.filepath;
     const fileName = `${uuid.generate()}${uploadFileData.originalFilename}`;
-    console.log(fileName);
     const fileStream = fs.createReadStream(filePath);
     const s3 = new aws.S3({
       endpoint: "sgp1.digitaloceanspaces.com",
@@ -79,7 +78,6 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
       }
     );
 
-    console.log(filePath);
     // if (Array.isArray(uploadFileData)) {
     //   uploadFileData.forEach((uploadFile) => {
     //     const oldPath = uploadFile.filepath; //file path
