@@ -22,7 +22,6 @@ const uploadFile = async (e) => {
   console.log(files);
   const response = await fetch(`${apiUrl}/uploadFile`, {
     method: "POST",
-    Headers: { "Content-Type": "application/json" },
     body: formData,
   });
   responseDataLocation = await response.json();

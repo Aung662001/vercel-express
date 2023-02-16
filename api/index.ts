@@ -1,13 +1,9 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import formidable from "formidable";
-import fs, { rename, renameSync } from "fs";
+import fs from "fs";
 import uuid from "short-uuid";
-import { json } from "body-parser";
 import aws from "aws-sdk";
-import CloudWatchLogs from "aws-sdk/clients/cloudwatchlogs";
-const multer = require("multer");
-const multerS3 = require("multer-s3-v2");
 const app = express();
 const port = 3000;
 dotenv.config();
@@ -50,6 +46,10 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
   ///////////////////////formidable section
   const form = formidable();
   form.parse(req, (error, fields, file) => {
+    if (error) {
+      console.log("error in file");
+      return res.json({ error: "error in file" });
+    }
     const allReq = JSON.stringify(file.key); //all data
     const uploadFileData = JSON.parse(allReq); //all data
     const filePath = uploadFileData.filepath;
@@ -70,6 +70,8 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
       },
       (err, data) => {
         if (err) {
+          console.log("in sever response");
+          return res.json({ hello: "world" });
           console.log(err.message);
         } else {
           console.log(data);
@@ -97,6 +99,7 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
   });
   ///////////////////////
   /*const fileStream = fs.creat fileStream("./test.jpg");
+  
   req.pipt fileStream);
   console.log(uuid.generate());*/
 });
