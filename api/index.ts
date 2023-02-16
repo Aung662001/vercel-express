@@ -48,7 +48,7 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
   form.parse(req, (error, fields, file) => {
     if (error) {
       console.log("error in file");
-      return res.json({ error: "error in file" });
+      return;
     }
     const allReq = JSON.stringify(file.key); //all data
     const uploadFileData = JSON.parse(allReq); //all data
@@ -71,8 +71,7 @@ app.post("/api/uploadFile", (req: Request, res: Response) => {
       (err, data) => {
         if (err) {
           console.log("in sever response");
-          return res.json({ hello: "world" });
-          console.log(err.message);
+          return;
         } else {
           console.log(data);
           res.json(data);
