@@ -20,6 +20,7 @@ const uploadFile = async (e) => {
   const formData = new FormData(); //object
   files.forEach((file) => formData.append("key", file));
   console.log(files);
+
   const response = await fetch(`${apiUrl}/uploadFile`, {
     method: "POST",
     body: formData,
